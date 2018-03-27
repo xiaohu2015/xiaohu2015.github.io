@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法与数据结构," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="小白将的博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="排序算法排序是最基本的算法之一，常见的排序算法有插入排序、希尔排序、选择排序、冒泡排序、堆排序、归并排序及快速排序。每个排序算法的时间复杂度是不同的，但是最优的时间复杂度是O(NlogN)。有些排序算法是原址排序（即不需要额外空间），也有一些是非原址排序，这也是需要注意的特点。同样地，还要注意排序算法是否是稳定排序，这有时候很重要。这篇文章简单地介绍各个排序算法的思想，然后使用C++实现各个排序算">
+<meta name="keywords" content="算法与数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序算法">
+<meta property="og:url" content="http://xiaohu2015.github.io/2018/03/27/排序算法/index.html">
+<meta property="og:site_name" content="小白将的博客">
+<meta property="og:description" content="排序算法排序是最基本的算法之一，常见的排序算法有插入排序、希尔排序、选择排序、冒泡排序、堆排序、归并排序及快速排序。每个排序算法的时间复杂度是不同的，但是最优的时间复杂度是O(NlogN)。有些排序算法是原址排序（即不需要额外空间），也有一些是非原址排序，这也是需要注意的特点。同样地，还要注意排序算法是否是稳定排序，这有时候很重要。这篇文章简单地介绍各个排序算法的思想，然后使用C++实现各个排序算">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-27T12:32:29.455Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="排序算法">
+<meta name="twitter:description" content="排序算法排序是最基本的算法之一，常见的排序算法有插入排序、希尔排序、选择排序、冒泡排序、堆排序、归并排序及快速排序。每个排序算法的时间复杂度是不同的，但是最优的时间复杂度是O(NlogN)。有些排序算法是原址排序（即不需要额外空间），也有一些是非原址排序，这也是需要注意的特点。同样地，还要注意排序算法是否是稳定排序，这有时候很重要。这篇文章简单地介绍各个排序算法的思想，然后使用C++实现各个排序算">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xiaohu2015.github.io/2018/03/27/排序算法/"/>
+
+
+
+
+
+  <title>排序算法 | 小白将的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白将的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">为人民日益增长的美好生活需要而读书</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xiaohu2015.github.io/2018/03/27/排序算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小白将">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白将的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">排序算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-27T20:21:43+08:00">
+                2018-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h1><p>排序是最基本的算法之一，常见的排序算法有<strong>插入排序、希尔排序、选择排序、冒泡排序、堆排序、归并排序及快速排序</strong>。每个排序算法的时间复杂度是不同的，但是最优的时间复杂度是O(NlogN)。有些排序算法是原址排序（即不需要额外空间），也有一些是非原址排序，这也是需要注意的特点。同样地，还要注意排序算法是否是稳定排序，这有时候很重要。这篇文章简单地介绍各个排序算法的思想，然后使用C++实现各个排序算法。</p>
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><p>插入排序算法思想很简单，就是将元素插入已经有序的数组来完成排序。假定数组前<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 插入排序</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void insertionSort(vector&lt;Comparable&gt;&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	for (int i = 1; i &lt; v.size(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		// 先保存当前要插入的元素</span><br><span class="line">		Comparable tmp = move(v[i]);</span><br><span class="line">		int j = i;</span><br><span class="line">		for (; j &gt; 0 &amp;&amp; tmp &lt; v[j - 1]; --j)</span><br><span class="line">		&#123;</span><br><span class="line">			v[j] = move(v[j - 1]);  // 大于tmp的元素后移</span><br><span class="line">		&#125;</span><br><span class="line">		v[j] = move(tmp);  // 插入正确的位置</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">这里的实现我们采用泛型模板，泛型参数```Comparable```要求支持比较操作符```&lt;```。同时我们使用了移动语义，这有利于效率的提升。后面其它算法的实现我们也都采用这种方式。从算法的实现可以看到有两层循环，那么插入排序的复杂度是```O(N^2)```。此外，插入排序对于两个相等的元素，并不会改变其先后顺序，所以是稳定排序。同时其不需要额外空间，也是原址排序。</span><br><span class="line"></span><br><span class="line">## 希尔排序</span><br><span class="line">希尔排序是以提出者（Donald Shell）命名的。希尔排序与插入排序的思想很相似，但是其使用了一个递增序列```H1, H2, ..., Ht```。希尔排序每个阶段处理这个递增序列中的一个元素```Hk```，其进行的是```Hk```间隔排序，就是保证对于任意的```i```，要有```A[i] &lt; A[i+Hk]```。每个阶段的排序利用与插入排序相似的思想：处理的位置```i```是```hk, hk + 1, ..., N```，而且每个位置的插入比较位置是```i, i - Hk, , i - 2Hk...```。希尔排序的一个特点是，如果先进行```Hk```间隔排序，那么```Hk-1```间隔排序后，```Hk```间隔仍然保持有序。这是希尔排序有效的重要保证。对于递增序列，常使用的是```Ht = floor(N/2)```，而且```Hk = floor((Hk+1)/2)```。</span><br><span class="line"></span><br><span class="line">```cpp</span><br><span class="line">// 希尔排序</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void shellSort(vector&lt;Comparable&gt;&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	// 依次处理递增序列各个间隔值（从后往前）</span><br><span class="line">	for (int gap = v.size() / 2; gap &gt; 0; gap /= 2)</span><br><span class="line">	&#123;</span><br><span class="line">		// 对于每个间隔，进行插入排序</span><br><span class="line">		for (int i = gap; i &lt; v.size(); ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			Comparable tmp = move(v[i]);</span><br><span class="line">			int j = i;</span><br><span class="line">			for (; j &gt;= gap &amp;&amp; tmp &lt; v[j - gap]; j -= gap)</span><br><span class="line">			&#123;</span><br><span class="line">				v[j] = move(v[j - gap]);</span><br><span class="line">			&#125;</span><br><span class="line">			v[j] = move(tmp);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>希尔排序的复杂度并不是那么直接，其与选用的递增序列有关，最差状态下为<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 选择排序</span><br><span class="line">选择排序应该是最直观的排序算法，其将数组分为排序部分与未排序部分，每次在未排序部分选出一个最小值，然后放到排序部分的后面。假定数组前```i-1```个位置已经有序，那么从未排序序列```i, i+1,..., N```中找到最小值位置```j```，然后交换位置```j```与位置```i```上元素。选择排序也需要重复这样的过程```N-1```次。</span><br><span class="line">```cpp</span><br><span class="line">// 选择排序</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void selectSort(vector&lt;Comparable&gt;&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	for (int i = 0; i &lt; v.size() - 1; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		int minIdx = i;</span><br><span class="line">		// 寻找未排序部分的最小值位置</span><br><span class="line">		for (int j = i + 1; j &lt; v.size(); ++j)</span><br><span class="line">		&#123;</span><br><span class="line">			if (v[minIdx] &gt; v[j])</span><br><span class="line">			&#123;</span><br><span class="line">				minIdx = j;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		swap(v[minIdx], v[i]);  // 通过交换将最小值在正确位置</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>选择排序的时间复杂度为<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">## 冒泡排序</span><br><span class="line">冒泡排序如其名，就是让数组元素像水中气泡一样逐渐上浮，从而达到排序的目的。其也是将数组分为排序部分与未排序部分。对于未排序部分，依次比较相邻两个元素，如果前者大于后者则交换其位置。和选择排序与插入排序一样，冒泡排序也应该需要```N-1```次重复操作，但是有一个更好的选择。那就是在每个阶段，记录一个```flag```标志，如果没有进行任何一次元素交换，说明未排序部分已经有序，后面就不需要再继续冒泡了。</span><br><span class="line">```cpp</span><br><span class="line">// 冒泡排序</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void bubbleSort(vector&lt;Comparable&gt;&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	bool flag = true;  // 是否交换过元素</span><br><span class="line">	for (int i = 0; flag; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		flag = false;   // 初始为false</span><br><span class="line">		// 向下冒泡</span><br><span class="line">		for (int j = v.size() - 1; j &gt; i; --j)</span><br><span class="line">		&#123;</span><br><span class="line">			if (v[j] &lt; v[j - 1])  // 不是&lt;=，那样是不稳定排序</span><br><span class="line">			&#123;</span><br><span class="line">				swap(v[j], v[j - 1]);</span><br><span class="line">				flag = true;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>冒泡排序时间复杂度也是<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">## 归并排序</span><br><span class="line">前面所讨论的排序算法都是复杂度为```O(N^2)```的低效率排序算法。下面的算法都是时间复杂度为```O(NlogN)```的高级算法。我们从归并算法说起，归并算法是基于分治策略。归并算法的基础是合并两个已经有序的子数组，将两个已经有序的子数组进行合并是容易的。比如两个有序子数组```A```和```B```，然后有一个输出数组```C```。此时你需要三个位置索引```i```、```j```和```k```，每次比较```A[i]```与```B[j]```，然后将最小者复制到```C[k]```，同时递增相应的位置索引。重复上述过程知道某一个子数组遍历完，未遍历完的子数组剩余部分直接复制到输出数组就完成整个合并过程。利用合并，归并排序算法的步骤为：（1）将数组分为两个大小相等的子数组；（2）对每个子数组进行排序，除非子数组比较小，否则利用递归方式完成排序；（3）合并两个有序的子数组，完成排序。</span><br><span class="line">```cpp</span><br><span class="line">// 归并排序的辅助方法：合并两个有序数组</span><br><span class="line">// v为要排序数组，tmp为辅助数组</span><br><span class="line">// left为左子数组的开始位置，right为右子数组的开始位置，end为结束位置</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void merge(vector&lt;Comparable&gt;&amp; v, vector&lt;Comparable&gt;&amp; tmp, int left,</span><br><span class="line">	int right, int end)</span><br><span class="line">&#123;</span><br><span class="line">	int tmpPos = left;</span><br><span class="line">	int leftEnd = right - 1;</span><br><span class="line">	int num = end - left + 1;  // 总数</span><br><span class="line"></span><br><span class="line">	// 合并两个子数组直到某一个子数组遍历完</span><br><span class="line">	while (left &lt;= leftEnd &amp;&amp; right &lt;= end)</span><br><span class="line">	&#123;</span><br><span class="line">		if (v[left] &lt;= v[right])</span><br><span class="line">		&#123;</span><br><span class="line">			tmp[tmpPos++] = move(v[left++]);</span><br><span class="line">		&#125;</span><br><span class="line">		else</span><br><span class="line">		&#123;</span><br><span class="line">			tmp[tmpPos++] = move(v[right++]);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// 处理左子数组剩余部分</span><br><span class="line">	while (left &lt;= leftEnd) &#123; tmp[tmpPos++] = move(v[left++]); &#125;</span><br><span class="line">	// 处理右子数组剩余部分</span><br><span class="line">	while (right &lt;= end) &#123; tmp[tmpPos++] = move(v[right++]); &#125;</span><br><span class="line"></span><br><span class="line">	// 合并结果复制到原数组</span><br><span class="line">	while (num &gt; 0)</span><br><span class="line">	&#123;</span><br><span class="line">		v[end] = move(tmp[end]);</span><br><span class="line">		--end;</span><br><span class="line">		--num;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 归并合并的内部调用函数</span><br><span class="line">// v为要排序数组，tmp为辅助数组</span><br><span class="line">// left要排序数组部分的开始位置，right是结束位置</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void mergeSort(vector&lt;Comparable&gt;&amp; v, vector&lt;Comparable&gt;&amp; tmp, </span><br><span class="line">	int left, int right)</span><br><span class="line">&#123;</span><br><span class="line">	if (left &lt; right)</span><br><span class="line">	&#123;</span><br><span class="line">		int mid = (left + right) / 2;</span><br><span class="line">		// 递归处理每个子数组</span><br><span class="line">		mergeSort(v, tmp, left, mid);</span><br><span class="line">		mergeSort(v, tmp, mid + 1, right);</span><br><span class="line">		// 合并</span><br><span class="line">		merge(v, tmp, left, mid + 1, right);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 归并排序</span><br><span class="line">template&lt;typename Comparable&gt;</span><br><span class="line">void mergeSort(vector&lt;Comparable&gt;&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	vector&lt;Comparable&gt; tmp(v.size());</span><br><span class="line">	mergeSort(v, tmp, 0, v.size() - 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>归并排序的时间复杂度是<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 堆排序</span><br><span class="line">堆排序是利用堆来进行排序。堆一种特殊的二叉树，对于最大堆来说，其每个节点的值都大于或者等于其子节点的值。可以使用数组来存储堆：将根节点放在第一个数组位置，根节点的左右子节点分别存储在数组的第二与第三位置，然后其左子节点的左右子节点放置在第四与第五位置，依次类推。如果数组索引是从```0```开始的，对于位置```i```处的节点，其左子节点位置为```2*i+1```，其右子节点位置为```2*(i+1)```。要进行堆排序，首先要建立堆。要构建堆，需要使用一个”下沉过程“，这里我们称为```siftdown```：首先将位于根节点的键值与其子节点的较大键值进行比较，如果根节点的键值较小，那么就交换根节点与子节点，然后对该子节点重复这个过程，直到到达叶节点或者根节点的键值不小于其子节点的键值。假定一个堆的深度为```d```，那么首先可以将深度为```d-1```的节点使用```siftdown```过程，这样深度为```d-1```的子树满足堆性质，然后对深度为```d-2```的节点使用```siftdown```过程，······，最后处理堆的根节点，此时这个树满足堆性质。一旦我们构建好了堆，我们可以在保持堆性质的同时重复删除根节点，得到的这些根节点是有序的，从而达到排序的目的。怎么在删除根节点之后还保持堆性质呢？这里有一个技巧，我们可以交换根节点与最右子节点的键值，此时将堆将缩减一个元素（最右子节点），然后对当前根节点调用```siftdown```。我们知道最右子节点恰好是数组最后的位置，所以重复这一过程，可以达到原址排序的目的。</span><br><span class="line">```cpp</span><br><span class="line">// 返回节点i的左子节点位置</span><br><span class="line">inline int leftChild(int i) &#123; return 2 * i + 1; &#125;</span><br><span class="line"></span><br><span class="line">// 堆排序辅助函数</span><br><span class="line">// v是存储堆的数组，i是要下沉的节点，n代表当前堆的大小</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void siftDown(vector&lt;Comparable&gt;&amp; v, int i, int n)</span><br><span class="line">&#123;</span><br><span class="line">	int child;</span><br><span class="line">	Comparable tmp = move(v[i]);  // 记录要下沉的值</span><br><span class="line">	while (leftChild(i) &lt; n)</span><br><span class="line">	&#123;</span><br><span class="line">		child = leftChild(i); // 左子节点</span><br><span class="line">		// 寻找最大子节点</span><br><span class="line">		if (child != n - 1 &amp;&amp; v[child] &lt; v[child + 1])</span><br><span class="line">		&#123;</span><br><span class="line">			++child;</span><br><span class="line">		&#125;</span><br><span class="line">		if (tmp &lt; v[child])  // 子节点上移</span><br><span class="line">		&#123;</span><br><span class="line">			v[i] = move(v[child]);</span><br><span class="line">			i = child;</span><br><span class="line">		&#125;</span><br><span class="line">		else  // 终止</span><br><span class="line">		&#123;</span><br><span class="line">			break;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	v[i] = move(tmp);  // 下沉到正确位置</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void heapSort(vector&lt;Comparable&gt;&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	// 先建立堆</span><br><span class="line">	for (int i = v.size() / 2 - 1; i &gt;= 0; --i)</span><br><span class="line">	&#123;</span><br><span class="line">		siftDown(v, i, v.size());</span><br><span class="line">	&#125;</span><br><span class="line">	// 重复删除根节点</span><br><span class="line">	for (int i = v.size() - 1; i &gt; 0; --i)</span><br><span class="line">	&#123;</span><br><span class="line">		swap(v[i], v[0]);  // 交换根节点与最右子节点</span><br><span class="line">		siftDown(v, 0, i);  // 下沉根节点</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>堆排序的时间复杂度也是<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 快速排序</span><br><span class="line">快速排序与归并排序有相似之处，其采用的也是分治的策略。快速排序也将数组划分为两部分，但是其划分是根据一个选定的中心点（```pivot```），前半部分是小于```pivot```值，后半部分大于```pivot```。不断重复这种策略在每个子数组上，即可完成排序。快速排序的一个关键点是选择中心点，选择中心点后要将原数组分割成两部分。如果中心点选择不恰当，那么会导致分割的两个子数组大小严重不平衡，这样快速排序的性能就会恶化。一个比较好的策略是选择数组最左边、最右边与中心位置的中间值，即```Median-of-Three```策略：</span><br><span class="line">```cpp</span><br><span class="line">// 快速排序：选定中心点策略 </span><br><span class="line">// v是排序数组，left与right分别是要分割数组的左右边界</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">const Comparable&amp; median3(vector&lt;Comparable&gt;&amp; v, int left, int right)</span><br><span class="line">&#123;</span><br><span class="line">	int mid = (left + right) / 2;</span><br><span class="line">	if (v[mid] &lt; v[left]) &#123; swap(v[mid], v[left]); &#125;</span><br><span class="line">	if (v[left] &gt; v[right]) &#123; swap(v[left], v[right]); &#125;</span><br><span class="line">	if (v[mid] &gt; v[right]) &#123; swap(v[mid], v[right]); &#125;</span><br><span class="line"></span><br><span class="line">	// left位置的值小于等于pivot，right位置的值一定大于等于pivot，</span><br><span class="line">	// 要分割的数组变成left+1到right-1</span><br><span class="line">	swap(v[mid], v[right - 1]);  // 将pivot放到right-1位置处</span><br><span class="line">	return v[right - 1];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个选择中心点的策略很简单，但是最后把选择的中心点存储在数组倒数第二个位置，这个是为分割做准备的。一旦选定中心点，那么就要根据中心点将数组分为左右两部分。一个比较好的策略是采用左右夹逼。假定要分割的数组是<figure class="highlight plain"><figcaption><span>A[left+1], ..., A[right]```。此时记住```A[right]```此时存储的是中心点的值。我们设置两个位置索引变量```i```和```j```，```i```从最左侧```left```开始，```j```从最右侧```right-1```开始。我们将```i```向右移动，直到此位置处的值大于或者等于```pivot```，同时我们将```j```向左移动，直到此位置处的值小于或者等于```pivot```。如果此时```i```还在```j```的左侧，我们交换位置```i```和位置```j```处的值。然后重复上面的过程直到```i```出现在```j```的右侧，此时我们只需要交换位置```i```与位置```right```处的值就完成了分割。完成分割后，我们只需要递归处理每个子数组即可。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">```cpp</span><br><span class="line">// 快速排序辅助函数</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void quickSort(vector&lt;Comparable&gt;&amp; v, int left, int right)</span><br><span class="line">&#123;</span><br><span class="line">	if (left + 1 &lt; right) // 3个及以上元素</span><br><span class="line">	&#123;</span><br><span class="line">		Comparable pivot = median3(v, left, right);  // 中心点</span><br><span class="line">		int i = left, j = right - 1;</span><br><span class="line">		while (true)</span><br><span class="line">		&#123;</span><br><span class="line">			while (v[++i] &lt; pivot) &#123;&#125;  // i右移</span><br><span class="line">			while (v[--j] &gt; pivot) &#123;&#125;  // j左移</span><br><span class="line">			if (i &lt; j)</span><br><span class="line">			&#123;</span><br><span class="line">				swap(v[i], v[j]);</span><br><span class="line">			&#125;</span><br><span class="line">			else</span><br><span class="line">			&#123;</span><br><span class="line">				break;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		swap(v[i], v[right - 1]);</span><br><span class="line">		// 对子数组递归</span><br><span class="line">		quickSort(v, left, i - 1);</span><br><span class="line">		quickSort(v, i + 1, right);</span><br><span class="line">	&#125;</span><br><span class="line">	else if (left &lt; right)  // 两个元素</span><br><span class="line">	&#123;</span><br><span class="line">		if (v[left] &gt; v[right]) &#123; swap(v[left], v[right]); &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 快速排序</span><br><span class="line">template &lt;typename Comparable&gt;</span><br><span class="line">void quickSort(vector&lt;Comparable&gt;&amp; v)</span><br><span class="line">&#123;</span><br><span class="line">	quickSort(v, 0, v.size() - 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>递归时，要分两种情况，三个及以上元素时继续调用快速排序，但是两个元素时，必须要单独处理。因为选定中心点需要三个及以上元素。其实，快速排序对于小数组优势并不是很明显，当数组较小时，可以使用其它排序算法处理，比如插入排序：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 插入排序</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Comparable&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insertionSort</span><span class="params">(<span class="built_in">vector</span>&lt;Comparable&gt;&amp; v, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; v.size(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		Comparable tmp = move(v[i]);</span><br><span class="line">		<span class="keyword">int</span> j = i;</span><br><span class="line">		<span class="keyword">for</span> (; j &gt; <span class="number">0</span> &amp;&amp; tmp &lt; v[j - <span class="number">1</span>]; --j)</span><br><span class="line">		&#123;</span><br><span class="line">			v[j] = move(v[j - <span class="number">1</span>]);</span><br><span class="line">		&#125;</span><br><span class="line">		v[j] = move(tmp);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 快速排序辅助函数</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> SIZE = <span class="number">5</span>;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Comparable&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="built_in">vector</span>&lt;Comparable&gt;&amp; v, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (left + SIZE &lt; right) </span><br><span class="line">	&#123;</span><br><span class="line">		Comparable pivot = median3(v, left, right);  <span class="comment">// 中心点</span></span><br><span class="line">		<span class="keyword">int</span> i = left, j = right - <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">while</span> (v[++i] &lt; pivot) &#123;&#125;  <span class="comment">// i右移</span></span><br><span class="line">			<span class="keyword">while</span> (v[--j] &gt; pivot) &#123;&#125;  <span class="comment">// j左移</span></span><br><span class="line">			<span class="keyword">if</span> (i &lt; j)</span><br><span class="line">			&#123;</span><br><span class="line">				swap(v[i], v[j]);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		swap(v[i], v[right - <span class="number">1</span>]);</span><br><span class="line">		<span class="comment">// 对子数组递归</span></span><br><span class="line">		quickSort(v, left, i - <span class="number">1</span>);</span><br><span class="line">		quickSort(v, i + <span class="number">1</span>, right);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> </span><br><span class="line">	&#123;</span><br><span class="line">		insertionSort(v, left, right);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 快速排序</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Comparable&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="built_in">vector</span>&lt;Comparable&gt;&amp; v)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	quickSort(v, <span class="number">0</span>, v.size() - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>快速排序的时间复杂度平均为<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">大部分排序算法这里算是介绍完了，从比较上来看，这些排序算法最优性能为```O(NlogN)```。但是大家可以发现一个事实，这些算法都是通过比较来完成的，而且已经证明```O(NlogN)```是所有利用比较来进行排序的算法的一个下限。还有一点要说明，这些排序算法都有一个前提，那就是要排序的数组可以全部读进内存。但是当要排序的元素量非常大时，可能无法一下子将所有元素放进内存，此时需要外部排序算法。感兴趣可以去了解。</span><br><span class="line"></span><br><span class="line">## 链表排序</span><br><span class="line">前面的排序方法我们都是处理是```vector```，其实我们都默认要排序的是数组结构，那么元素可以随机存取（Random Access）。但是，我们知道有些结构是不支持随机存取的，比如链表结构。这里我们简单地讨论单链表结构：</span><br><span class="line">```cpp</span><br><span class="line">// 单链表节点</span><br><span class="line">class ListNode</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">	int val;</span><br><span class="line">	ListNode* next;</span><br><span class="line">	ListNode(int value, ListNode* nt = nullptr)</span><br><span class="line">		:val&#123;value&#125;, next&#123;nt&#125;</span><br><span class="line">	&#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>链表结构只能前向遍历，这是很大的限制。但是，这并不代表上面的排序算法不能起作用，只不过要进行修改。我们先看一下如何使用插入排序来对一个链表排序。对于插入排序，关键的是要找到插入点位置，链表只能前向遍历，所以必须从头节点找到插入点位置，而不能采用之前的策略。实现就很简单了：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从链表头节点开始寻找插入点位置</span></span><br><span class="line"><span class="function">ListNode* <span class="title">findInsertPos</span><span class="params">(ListNode* head, <span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ListNode* prev = <span class="literal">nullptr</span>;</span><br><span class="line">	<span class="keyword">for</span> (ListNode* cur = head; cur != <span class="literal">nullptr</span> &amp;&amp; cur-&gt;val &lt;= x;</span><br><span class="line">		prev = cur, cur = cur-&gt;next)</span><br><span class="line">		;</span><br><span class="line">	<span class="keyword">return</span> prev;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用插入排序对链表进行排序</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insertionSortList</span><span class="params">(ListNode* &amp; head)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//// 哑巴节点</span></span><br><span class="line">	ListNode dummy&#123; INT_MIN &#125;; <span class="comment">// 不要执行dummy.next = head</span></span><br><span class="line">    <span class="comment">// 每次处理一个节点</span></span><br><span class="line">	<span class="keyword">for</span> (ListNode* cur = head; cur != <span class="literal">nullptr</span>;)</span><br><span class="line">	&#123;</span><br><span class="line">		ListNode* pos = findInsertPos(&amp;dummy, cur-&gt;val);  <span class="comment">// 确定插入位置</span></span><br><span class="line">		<span class="comment">// 插入此位置</span></span><br><span class="line">		ListNode* tmp = cur-&gt;next;</span><br><span class="line">		cur-&gt;next = pos-&gt;next;</span><br><span class="line">		pos-&gt;next = cur;</span><br><span class="line">		cur = tmp;</span><br><span class="line">	&#125;</span><br><span class="line">	head = dummy.next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的插入排序算法的时间复杂度还是<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">```cpp</span><br><span class="line">// 归并两个有序链表</span><br><span class="line">ListNode* mergeList(ListNode* l1, ListNode* l2)</span><br><span class="line">&#123;</span><br><span class="line">	// 哑巴节点</span><br><span class="line">	ListNode dummy&#123; 0 &#125;;</span><br><span class="line">	ListNode* cur = &amp;dummy;</span><br><span class="line">	// 处理公共部分</span><br><span class="line">	for (; l1 != nullptr &amp;&amp; l2 != nullptr;</span><br><span class="line">		cur = cur-&gt;next)</span><br><span class="line">	&#123;</span><br><span class="line">		if (l1-&gt;val &lt;= l2-&gt;val)</span><br><span class="line">		&#123;</span><br><span class="line">			cur-&gt;next = l1;</span><br><span class="line">			l1 = l1-&gt;next;</span><br><span class="line">		&#125;</span><br><span class="line">		else</span><br><span class="line">		&#123;</span><br><span class="line">			cur-&gt;next = l2;</span><br><span class="line">			l2 = l2-&gt;next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	// 处理l1剩余部分</span><br><span class="line">	while (l1 != nullptr) &#123; cur-&gt;next = l1; l1 = l1-&gt;next; cur = cur-&gt;next; &#125;</span><br><span class="line">	// 处理l2剩余部分</span><br><span class="line">	while (l2 != nullptr) &#123; cur-&gt;next = l2; l2 = l2-&gt;next; cur = cur-&gt;next; &#125;</span><br><span class="line">	return dummy.next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 归并排序链表</span><br><span class="line">void mergeSortList(ListNode* &amp; head)</span><br><span class="line">&#123;</span><br><span class="line">	// 无元素或者只有一个元素</span><br><span class="line">	if (head == nullptr || head-&gt;next == nullptr) return;</span><br><span class="line">	// 利用快慢指针找到中间节点</span><br><span class="line">	ListNode* slow = head, *fast = head;</span><br><span class="line">	while (fast-&gt;next != nullptr &amp;&amp; fast-&gt;next-&gt;next != nullptr)</span><br><span class="line">	&#123;</span><br><span class="line">		fast = fast-&gt;next-&gt;next;</span><br><span class="line">		slow = slow-&gt;next;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// 根据中间节点分割链表</span><br><span class="line">	fast = slow;</span><br><span class="line">	slow = slow-&gt;next;</span><br><span class="line">	fast-&gt;next = nullptr;</span><br><span class="line"></span><br><span class="line">	mergeSortList(head);   // 处理前半部分</span><br><span class="line">	mergeSortList(slow);   // 处理后半部分</span><br><span class="line">	head = mergeList(head, slow);  // 归并</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，链表的归并排序不需要额外存储空间，这与数组的归并排序不同。</p>
+<p>前面说过，仅通过比较的方式来进行排序的算法，其效率不可能优于<code>O(NlogN)</code>。但是也是存在可以在线性时间内完成排序的算法，如桶排序与基数排序。路漫漫其修远兮，感兴趣的继续探索吧！</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1] Mark Allen Weiss, <a href="http://users.cs.fiu.edu/~weiss/" target="_blank" rel="noopener">Data Structures and Algorithm Analysis in C++, fourth edition</a>, 2013.<br>[2] Richard E. Neapolitan, <a href="https://www.amazon.com/Foundations-Algorithms-Richard-Neapolitan-ebook/dp/B00K6I40AW" target="_blank" rel="noopener">Foundations of Algorithms, fifth edition</a>, 2016.<br>[3] <a href="https://github.com/soulmachine/leetcode" target="_blank" rel="noopener">LeetCode 题解</a>.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>您的支持将鼓励我继续写作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weichat.jpg" alt="小白将 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法与数据结构/" rel="tag"># 算法与数据结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/27/实例介绍TensorFlow的输入流水线/" rel="next" title="实例介绍TensorFlow的输入流水线">
+                <i class="fa fa-chevron-left"></i> 实例介绍TensorFlow的输入流水线
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">小白将</p>
+              <p class="site-description motion-element" itemprop="description">万事胜意</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/xiaohuzc/" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/xiaohu2015" target="_blank" title="Github">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Github</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/xiaohu2022" target="_blank" title="CSDN博客">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN博客</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#排序算法"><span class="nav-number">1.</span> <span class="nav-text">排序算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#插入排序"><span class="nav-number">1.1.</span> <span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-number">1.2.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">小白将</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

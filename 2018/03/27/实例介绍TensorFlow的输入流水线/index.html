@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -68,12 +68,10 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="TensorFlow," />
 
 
 
-
-  
 
 
   <link rel="alternate" href="/atom.xml" title="小白将的博客" type="application/atom+xml" />
@@ -84,20 +82,21 @@
 
 
 <meta name="description" content="前言在训练模型时，我们首先要处理的就是训练数据的加载与预处理的问题，这里称这个过程为输入流水线（input pipelines，或输入管道，参考）。在TensorFlow中，典型的输入流水线包含三个流程（ETL流程）：  提取（Extract）：从存储介质（如硬盘）中读取数据，可能是本地读取，也可能是远程读取（比如在分布式存储系统HDFS） 预处理（Transform）：利用CPU处理器解析和预处">
+<meta name="keywords" content="TensorFlow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="实例介绍TensorFlow的输入流水线">
 <meta property="og:url" content="http://xiaohu2015.github.io/2018/03/27/实例介绍TensorFlow的输入流水线/index.html">
 <meta property="og:site_name" content="小白将的博客">
 <meta property="og:description" content="前言在训练模型时，我们首先要处理的就是训练数据的加载与预处理的问题，这里称这个过程为输入流水线（input pipelines，或输入管道，参考）。在TensorFlow中，典型的输入流水线包含三个流程（ETL流程）：  提取（Extract）：从存储介质（如硬盘）中读取数据，可能是本地读取，也可能是远程读取（比如在分布式存储系统HDFS） 预处理（Transform）：利用CPU处理器解析和预处">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://static.zybuluo.com/Team/t9ugqoqj49f648zqikzeuo24/image_1c8udj3ogsgqsj3lvd1utr1ano9.png">
-<meta property="og:image" content="http://static.zybuluo.com/Team/dcod1n30mo52odltybwke4ou/image_1c8udsv2lq3ha6b9fm17nd8i716.png">
-<meta property="og:image" content="http://static.zybuluo.com/Team/ypotlm14e4ah2bayyzt8xdl2/AnimatedFileQueues.gif">
-<meta property="og:updated_time" content="2018-03-27T06:30:05.763Z">
+<meta property="og:image" content="http://xiaohu2015.github.io/2018/03/27/实例介绍TensorFlow的输入流水线/1.png">
+<meta property="og:image" content="http://xiaohu2015.github.io/2018/03/27/实例介绍TensorFlow的输入流水线/2.png">
+<meta property="og:image" content="http://xiaohu2015.github.io/2018/03/27/实例介绍TensorFlow的输入流水线/3.gif">
+<meta property="og:updated_time" content="2018-03-27T12:18:51.075Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="实例介绍TensorFlow的输入流水线">
 <meta name="twitter:description" content="前言在训练模型时，我们首先要处理的就是训练数据的加载与预处理的问题，这里称这个过程为输入流水线（input pipelines，或输入管道，参考）。在TensorFlow中，典型的输入流水线包含三个流程（ETL流程）：  提取（Extract）：从存储介质（如硬盘）中读取数据，可能是本地读取，也可能是远程读取（比如在分布式存储系统HDFS） 预处理（Transform）：利用CPU处理器解析和预处">
-<meta name="twitter:image" content="http://static.zybuluo.com/Team/t9ugqoqj49f648zqikzeuo24/image_1c8udj3ogsgqsj3lvd1utr1ano9.png">
+<meta name="twitter:image" content="http://xiaohu2015.github.io/2018/03/27/实例介绍TensorFlow的输入流水线/1.png">
 
 
 
@@ -105,7 +104,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Gemini',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -168,7 +167,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">万事胜意</p>
+        <p class="site-subtitle">为人民日益增长的美好生活需要而读书</p>
       
   </div>
 
@@ -194,6 +193,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
           </a>
         </li>
       
@@ -314,9 +333,9 @@
 <li><strong>加载（load）</strong>：将预处理后的数据加载到加速设备中（如GPUs）来执行模型的训练。</li>
 </ol>
 <p>输入流水线对于加速模型训练还是很重要的，如果你的CPU处理数据能力跟不上GPU的处理速度，此时CPU预处理数据就成为了训练模型的瓶颈环节。除此之外，上述输入流水线本身也有很多优化的地方。比如，一个典型的模型训练过程中，CPU预处理数据时，GPU是闲置的，当GPU训练模型时，CPU是闲置的，这个过程如下所示：</p>
-<p> <img src="http://static.zybuluo.com/Team/t9ugqoqj49f648zqikzeuo24/image_1c8udj3ogsgqsj3lvd1utr1ano9.png" alt="image_1c8udj3ogsgqsj3lvd1utr1ano9.png-23.7kB"></p>
+<p> <img src="/2018/03/27/实例介绍TensorFlow的输入流水线/1.png" alt="image"></p>
 <p>这样一个训练step中所花费的时间是CPU预处理数据和GPU训练模型时间的总和。显然这个过程中有资源浪费，一个改进的方法就是交叉CPU数据处理和GPU模型训练这两个过程，当GPU处于第$N$个训练阶段，CPU正在准备第$N+1$步所需的数据，如下图所示：</p>
-<p><img src="http://static.zybuluo.com/Team/dcod1n30mo52odltybwke4ou/image_1c8udsv2lq3ha6b9fm17nd8i716.png" alt="image_1c8udsv2lq3ha6b9fm17nd8i716.png-21.2kB"></p>
+<p><img src="/2018/03/27/实例介绍TensorFlow的输入流水线/2.png" alt="image_1c8udsv2lq3ha6b9fm17nd8i716.png-21.2kB"></p>
 <p>明显上述设计可以充分最大化利用CPU和GPU，从而减少资源的闲置。另外当存在多个CPU核心时，这又会涉及到CPU的并行化技术（多线程）来加速数据预处理过程，因为每个训练样本的预处理过程往往是互相独立的。关于输入流程线的优化可以参考TensorFlow官网上的<a href="https://www.tensorflow.org/performance/datasets_performance" target="_blank" rel="noopener">Input Pipeline Performance Guide</a>，相信你会受益匪浅。</p>
 <p>幸运的是，最新的TensorFlow版本提供了<code>tf.data</code>这一套APIs来帮助我们快速实现高效又灵活的输入流水线。在TensorFlow中最常见的加载训练数据的方式是通过<a href="https://www.tensorflow.org/api_guides/python/reading_data#Feeding" target="_blank" rel="noopener">Feeding</a>方式，其主要是定义<code>placeholder</code>，然后将通过Session.run()的<code>feed_dict</code>参数送入数据，但是这其实是最低效的加载数据方式。后来，TensorFlow增加了<a href="https://www.tensorflow.org/api_guides/python/reading_data#_QueueRunner_" target="_blank" rel="noopener">QueueRunner</a>机制，其主要是基于文件队列以及多线程技术，实现了更高效的输入流水线，但是其APIs很是让人难懂，所以就有了现在的<code>tf.data</code>来替代它。</p>
 <p>这里我们通过mnist实例来讲解如何使用<code>tf.data</code>建立简洁而高效的输入流水线，在介绍之前，我们先介绍如何制作TFRecords文件，这是TensorFlow支持的一种标准文件格式</p>
@@ -411,7 +430,7 @@ convert_to_TFRecords(mnist_datasets.test, &quot;test&quot;)
         plt.show()
         break  # 只读取一个Example
 </code></pre><p>上面仅是纯python的读取方式，这不是TFRecords文件的正确使用方式。既然是官方标准数据格式，TF也提供了使用TFRecords文件建立输入流水线的方式。在<code>tf.data</code>出现之前，使用的是<code>QueueRunner</code>方式，即文件队列机制，其原理如下图所示：</p>
-<p><img src="http://static.zybuluo.com/Team/ypotlm14e4ah2bayyzt8xdl2/AnimatedFileQueues.gif" alt="AnimatedFileQueues.gif-503.9kB"></p>
+<p><img src="/2018/03/27/实例介绍TensorFlow的输入流水线/3.gif" alt="AnimatedFileQueues.gif-503.9kB"></p>
 <p>文件队列机制主要分为两个阶段：第一个阶段将输入文件打乱，并在文件队列入列，然后<code>Reader</code>从文件队列中读取一个文件，同时文件队列出列这个文件，<code>Reader</code>同时对文件进行解码，然后生产数据样本，并将样本在样本队列中入列，可以定义多个<code>Reader</code>并发地从多个文件同时读取数据。从样本队列中的出列一定量的样本数据即可以用于一个训练过程。TF提供了配套的API来完成这个过程，注意的是这个输入流水线是直接嵌入训练的Graph中，即是整个图模型的一部分。根据文件的不同，可以使用不同类型的<code>Reader</code>，对于TFRecord文件，可以使用<code>tf.TFRecordReader</code>，下面是具体的实现代码：</p>
 <pre><code>def read_example(filename_queue):
     &quot;&quot;&quot;Read one example from filename_queue&quot;&quot;&quot;
@@ -684,6 +703,12 @@ with tf.Session() as sess:
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/TensorFlow/" rel="tag"># TensorFlow</a>
+          
+        </div>
+      
 
       
       
@@ -693,15 +718,15 @@ with tf.Session() as sess:
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/27/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/27/CUDA编程入门极简教程/" rel="prev" title="CUDA编程入门极简教程">
+                CUDA编程入门极简教程 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -768,7 +793,7 @@ with tf.Session() as sess:
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <p class="site-author-name" itemprop="name">小白将</p>
-              <p class="site-description motion-element" itemprop="description">为人民日益增长的美好生活需要而读书</p>
+              <p class="site-description motion-element" itemprop="description">万事胜意</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -786,6 +811,15 @@ with tf.Session() as sess:
 
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
@@ -882,7 +916,7 @@ with tf.Session() as sess:
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
@@ -982,6 +1016,13 @@ with tf.Session() as sess:
   
   
 
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
@@ -1044,6 +1085,28 @@ with tf.Session() as sess:
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
 
   
 
